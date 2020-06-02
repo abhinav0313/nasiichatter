@@ -1,0 +1,30 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create Room</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <lightning-layout-item size="12">
+                <lightning-input label="Name" onchange={handleRoomName}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12">
+                <lightning-dual-listbox name="Groups"
+                    label="Add Group(s)"
+                    source-label="Available"
+                    selected-label="Selected"
+                    field-level-help="Add already existing groups to this room."
+                    options={groupForRoom}
+                    onchange={handleGroupToRoom}>
+                </lightning-dual-listbox>
+            </lightning-layout-item>
+          </div>
+          <footer class="slds-modal__footer">
+            <lightning-button label="Create Group +" variant="brand" disabled onclick={handleCreateGroup} style="float: left;"></lightning-button>
+            <lightning-button label="Cancel" variant="neutral" onclick={closeModal} style="margin-right: 10px;"></lightning-button>
+            <lightning-button label="Save" variant="brand" onclick={saveRoom}></lightning-button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

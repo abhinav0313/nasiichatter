@@ -1,0 +1,31 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Create Group</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+            <lightning-layout-item size="12">
+                <lightning-input required label="Name" onchange={handleName}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12">
+                <lightning-input label="Description" onchange={handleDescription}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12">
+                <lightning-input type="checkbox" label="Private Group" onchange={handleIsPrivate}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12">
+                <lightning-input label="Information Title" onchange={handleInformationTitle}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12">
+                <lightning-input label="Information" onchange={handleInformationBody}></lightning-input>
+            </lightning-layout-item>
+          </div>
+          <footer class="slds-modal__footer">
+            <lightning-button label="Cancel"  variant="neutral" onclick={closeModal} style="margin-right: 10px;"></lightning-button>
+            <lightning-button label="Save" variant="brand" onclick={saveGroup}></lightning-button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

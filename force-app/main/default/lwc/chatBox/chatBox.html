@@ -1,0 +1,23 @@
+<template>
+    <lightning-layout multiple-rows="true">
+        <lightning-layout-item style="height: 375px;" size="12">
+            <div class="slds-scrollable" style="height: 375px;">
+                <template for:each={privateMessages} for:item="chat">
+                    <lightning-layout style={chat.chatStyle} key={chat.chatID} multiple-rows="true">
+                        <lightning-layout-item size="12" padding="around-large">
+                            <lightning-textarea style="border:none; background: inherit;" label={chat.message} variant="label-hidden" value={chat.message} disabled></lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout>
+        <lightning-layout-item style="height: 20px;"  size="11">
+            <lightning-textarea label="messageText" value={messageText} placeholder="Type a message" variant="label-hidden" onchange={handleMessageText}></lightning-textarea>
+        </lightning-layout-item>
+        <lightning-layout-item style="height: 20px;"  size="1">
+            <lightning-icon class="sendButton" icon-name="utility:send" alternative-text="Send" title="Send" onclick={handleSend}></lightning-icon>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

@@ -1,0 +1,78 @@
+<template>
+    <lightning-card>
+        <lightning-layout style="height:50px; border:1px solid rgb(200, 200, 200);background: rgb(135, 141, 175);;border-radius: 10px 10px 0px 0px; color:rgb(45, 45, 45);">
+            <lightning-layout-item style="height: 100%;" size="1" padding="around-medium">
+                <!--<lightning-icon icon-name="action:close" class="resizeclose" size="xx-small"></lightning-icon>-->
+            </lightning-layout-item>
+            <lightning-layout-item class="slds-align_absolute-center" style="height: 100%;" size="11" padding="around-medium">
+                <p style="font-family: serif;" class="slds-text-heading_large"><b>CHATTER</b></p>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout>
+            <lightning-layout-item style="height: 450px; border:1px solid rgb(200, 200, 200);margin: 0px auto;" size="12">
+                    <lightning-layout>
+                        <lightning-layout-item class="chatboxStyle" flexibility="auto,shrink" style="background: rgb(255,255,255);" size="4" padding="around-small">
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="12" style="padding: 0.45rem;">
+                                    <div class="slds-scrollable" style="height: 430px;">
+                                        <lightning-accordion class="main-menu" onsectiontoggle={handleToggleSection} active-section-name={activeSections}>
+                                            <lightning-accordion-section name="Room" label={roomLabel}>
+                                                <lightning-icon slot="actions" size="xx-small" icon-name="utility:add" alternative-text="Create Room" onclick={handleCreateRoom} icon-position="right"></lightning-icon>
+                                                <template for:each={allRoomsWrapper.data} for:item="roomWrap">
+                                                    <div key={roomWrap.gr.id}>
+                                                        <div style="margin-left: 15%;" class="slds-text-body_medium">{roomWrap.gr.name}</div>
+                                                    </div>
+                                                </template>
+                                            </lightning-accordion-section>
+                                    
+                                            <lightning-accordion-section name="Group" label={groupLabel}>
+                                                <lightning-icon slot="actions" size="xx-small" icon-name="utility:add" alternative-text="Create Group" onclick={handleCreateGroup} icon-position="right"></lightning-icon>
+                                                <template for:each={allGroupWrapper.data} for:item="groupWrap">
+                                                    <div key={groupWrap.cg.Id}>
+                                                        <div style="margin-left: 15%;" class="slds-text-body_medium">{groupWrap.cg.Name}</div>
+                                                    </div>
+                                                </template>
+                                            </lightning-accordion-section>
+        
+                                            <lightning-accordion-section name="Chat" label="Chat">
+                                                <div>
+                                                    <lightning-input onchange={searchUser} label="Search here" type="search"></lightning-input>
+                                                </div>
+                                                <div class="slds-scrollable" style="height: 250px;">
+                                                    <template if:true={getIfDataExists}>
+                                                        <template for:each={userWrapperList.data} for:item="wrap">
+                                                            <lightning-layout key={wrap.usr.Id} data-item={wrap.usr.Id} onclick={handleStartChat}>
+                                                                <lightning-layout-item size="2" padding="around-small">
+                                                                    <lightning-avatar variant="circle" src={wrap.usr.FullPhotoUrl} initials={wrap.initials} fallback-icon-name="standard:person_account" alternative-text={wrap.usr.name}></lightning-avatar>
+                                                                </lightning-layout-item>
+                                                                <lightning-layout-item size="10" padding="around-small">
+                                                                    <lightning-tile label={wrap.usr.Name}>
+                                                                        <!--<lightning-icon slot="media" class={getActiveClass} variant={getVariant} icon-name="utility:record" size="xx-small" alternative-text="online" title="online" ></lightning-icon>-->
+                                                                    </lightning-tile>
+                                                                </lightning-layout-item>
+                                                            </lightning-layout>
+                                                        </template>
+                                                    </template>
+                                                </div>
+                                            </lightning-accordion-section>
+                                        </lightning-accordion>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="chatboxStyle" style={bgImage} size="8" padding="around-small">
+                            <template if:true={isChatStarted}>
+                                <c-chat-box chat-user-id={sendToID} ></c-chat-box>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+    <lightning-card if:true={createRoom}>
+        <c-create-room onclose={closeModal}></c-create-room>
+    </lightning-card>
+    <lightning-card if:true={createGroup}>
+        <c-create-group onclose={closeModal}></c-create-group>
+    </lightning-card>
+</template>

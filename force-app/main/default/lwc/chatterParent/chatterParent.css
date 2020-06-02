@@ -1,0 +1,48 @@
+
+.sendButton{
+    margin-top: 1rem;
+}
+.resizeclose{
+    padding: 1px 1px 1px 1px !important;
+    margin: 0px 0px 0px 0px !important;
+}
+.chatboxStyle{
+    height: 450px; 
+    border:1px solid rgb(200,200,200);
+}
+.slds-docked-composer{
+    width:50% !important;
+    float : right !important;
+}
+
+.messageInput {
+    height : 380px !important;
+    width : 320px !important;
+}
+
+.slds-nowrap{
+    height: 330px;
+    width: 280px;
+}
+
+.slds-rich-text-editor__toolbar{
+    display: none;
+    
+}
+
+.slds-utility-panel.slds-is-open{
+	height: 380px; 
+    width: 280px;    
+}
+
+.chatStatusOnline{
+
+	position: relative;
+    margin: 0px 0px 0px -8px;
+    top: 10px;
+}
+
+.chatStatusOffline{
+
+	display: none;
+}
