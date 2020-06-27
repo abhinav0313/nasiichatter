@@ -1,0 +1,41 @@
+<template>
+        <lightning-layout multiple-rows="true" vertical-align="center" style="background: white">
+            <lightning-layout-item size="1" style="padding: 1%;width: auto;">
+                <lightning-avatar variant="circle" src={senderPhoto} fallback-icon-name="standard:person_account" alternative-text={senderName}></lightning-avatar>
+            </lightning-layout-item>
+            <lightning-layout-item size="10" padding="around-small">
+                <div class="lgc-bg">
+                    <lightning-tile label={senderName} href={gotoUser}>
+                        <p class="slds-truncate"><lightning-formatted-date-time style="color:rgb(117,117,117);" value={postedAt} year="numeric" month="numeric" day="numeric" hour="2-digit"
+                            minute="2-digit"  hour12="true"></lightning-formatted-date-time></p>
+                    </lightning-tile>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item alignment-bump="left" size="1" padding="around-small">
+                <lightning-button-menu variant="border-filled" menu-alignment="right">
+                    <lightning-menu-item label="Edit" value="Edit" onclick={handleEdit}></lightning-menu-item>
+                    <lightning-menu-item label="Delete" value="Delete" onclick={handleDelete}></lightning-menu-item>
+                </lightning-button-menu>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-formatted-rich-text value={feedBody}></lightning-formatted-rich-text>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" if:true={feedItems}>
+                <div class="slds-scrollable" style="max-height: 250px;min-height: auto;padding:5px;">
+                    <template for:each={feedItems} for:item="feedItem">
+                        <div key={feedItem}>
+                            <c-feed-item feed-item-info={feedItem}></c-feed-item>
+                        </div>    
+                    </template>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item if:false={isFocused} size="12" padding="around-small">
+                <lightning-input onfocus={handleCommentFocus} placeholder="write a comment"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item if:true={isFocused} size="12" padding="around-small">
+                <lightning-input-rich-text variant="bottom-toolbar" placeholder="write a comment" onchange={handleFeedItem}></lightning-input-rich-text>
+                <lightning-button style="float: right;" label="Send" variant="brand" title="Send" onclick={handleSend}></lightning-button>
+            </lightning-layout-item>
+            
+        </lightning-layout>
+</template>

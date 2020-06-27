@@ -14,6 +14,15 @@
             ],
             "c/createRoom": [
                 "createRoom/createRoom.js"
+            ],
+            "c/feed": [
+                "feed/feed.js"
+            ],
+            "c/feedItem": [
+                "feedItem/feedItem.js"
+            ],
+            "c/createFeed": [
+                "createFeed/createFeed.js"
             ]
         }
     },

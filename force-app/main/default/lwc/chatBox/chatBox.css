@@ -1,3 +1,10 @@
 .sendButton{
     margin-top: 1rem;
 }
+
+.textareaStyle{
+    background: inherit;
+    border: none;
+    margin: 0px;
+    width: 100%;
+}

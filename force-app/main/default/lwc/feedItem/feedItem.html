@@ -1,0 +1,18 @@
+<template>
+    <lightning-layout multiple-rows="true" vertical-align="center" style="background: rgb(230,230,230);">
+        <lightning-layout-item size="1" style="padding: 1%;width:inherit;">
+            <lightning-avatar variant="circle" src={senderPhoto} fallback-icon-name="standard:person_account" alternative-text={senderName}></lightning-avatar>
+        </lightning-layout-item>
+        <lightning-layout-item size="11" padding="around-small">
+            <div class="lgc-bg">
+                <lightning-tile label={senderName} href={gotoUser}>
+                    <p class="slds-truncate"><lightning-formatted-date-time style="color:rgb(117,117,117);" value={postedAt} year="numeric" month="numeric" day="numeric" hour="2-digit"
+                        minute="2-digit"  hour12="true"></lightning-formatted-date-time></p>
+                </lightning-tile>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" style="padding-left: 5%;">
+            <lightning-formatted-rich-text value={feedBody}></lightning-formatted-rich-text>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

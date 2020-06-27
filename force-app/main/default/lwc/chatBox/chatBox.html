@@ -1,23 +1,38 @@
 <template>
+    <lightning-layout pull-to-boundary="small" vertical-align="center" style="background: rgb(230,230,230);border-bottom: 1px solid rgba(200, 200, 200, 1);">
+        <lightning-layout-item size="1" style="padding: 1%;">
+            <lightning-avatar size="large" variant="circle" src={chatInfo.Photo} fallback-icon-name="standard:person_account" alternative-text={chatInfo.Name}></lightning-avatar>
+            <div>
+                <lightning-icon slot="media" style={chatInfo.IsActive} variant={chatInfo.Variant} icon-name="utility:record" size="xx-small" ></lightning-icon>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="9" padding="around-small">
+            <div class="slds-text-body_regular">{chatInfo.Name}</div>
+        </lightning-layout-item>
+        <lightning-layout-item size="2" alignment-bump="left" padding="around-small">
+            <lightning-button disabled label="Chatter Post"  variant="neutral"></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
     <lightning-layout multiple-rows="true">
-        <lightning-layout-item style="height: 375px;" size="12">
-            <div class="slds-scrollable" style="height: 375px;">
-                <template for:each={privateMessages} for:item="chat">
+        <lightning-layout-item style="height: 480px;" size="12">
+            <div class="slds-scrollable" style="height: 478px;">
+                <template for:each={chatMessages} for:item="chat">
                     <lightning-layout style={chat.chatStyle} key={chat.chatID} multiple-rows="true">
-                        <lightning-layout-item size="12" padding="around-large">
-                            <lightning-textarea style="border:none; background: inherit;" label={chat.message} variant="label-hidden" value={chat.message} disabled></lightning-textarea>
+                        <lightning-layout-item size="12" padding="around-small">
+                            <lightning-formatted-rich-text class="textareaStyle" value={chat.message}></lightning-formatted-rich-text>
+                            <!--<lightning-textarea style="border:none; background: inherit;" label={chat.message} variant="label-hidden" value={chat.message} disabled></lightning-textarea>-->
                         </lightning-layout-item>
                     </lightning-layout>
                 </template>
             </div>
         </lightning-layout-item>
     </lightning-layout>
-    <lightning-layout>
-        <lightning-layout-item style="height: 20px;"  size="11">
-            <lightning-textarea label="messageText" value={messageText} placeholder="Type a message" variant="label-hidden" onchange={handleMessageText}></lightning-textarea>
+    <lightning-layout pull-to-boundary="small" vertical-align="center" onkeydown={handleSend}>
+        <lightning-layout-item style="height: 104px;"  size="12">
+            <lightning-textarea style="height: 104px;" label="messageText" value={messageText} placeholder="Type a message" variant="label-hidden" onchange={handleMessageText}></lightning-textarea>
         </lightning-layout-item>
-        <lightning-layout-item style="height: 20px;"  size="1">
-            <lightning-icon class="sendButton" icon-name="utility:send" alternative-text="Send" title="Send" onclick={handleSend}></lightning-icon>
-        </lightning-layout-item>
+        <!--<lightning-layout-item style="height: 20px;"  size="1">
+            <lightning-icon icon-name="utility:send" alternative-text="Send" title="Send" onclick={handleSend}></lightning-icon>
+        </lightning-layout-item>-->
     </lightning-layout>
 </template>

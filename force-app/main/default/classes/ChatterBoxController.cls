@@ -13,7 +13,7 @@ public with sharing class ChatterBoxController{
         if(uIDSet!=null && uIDSet.size()>0){
             ID currentUId = UserInfo.getUserId();
             uIDSet.remove(currentUId);
-            for(User usr : [select id,name,firstname,lastname,FullPhotoUrl from User where IsActive =:true AND Name!='Automated Process' AND Id!=:currentUId ORDER by Name]){
+            for(User usr : [select id,name,firstname,lastname,FullPhotoUrl,SmallPhotoUrl from User where IsActive =:true AND Name!='Automated Process' AND Id!=:currentUId ORDER by Name]){
                 Boolean act = false;
                 if(uIDSet.contains(usr.Id))
                     act = true;
@@ -33,14 +33,13 @@ public with sharing class ChatterBoxController{
         system.debug('****recipientID::'+recipientID);
         system.debug('****type::'+type);
         system.debug('****messageText::'+messageText);
+        /**** Type is send starts ****/
+        if(type=='send'){
+            ConnectApi.ChatterMessages.sendMessage(messageText, recipientID);
+        }
+        /**** Type is send ends ****/
         recieverID = [SELECT Id, ConversationId, Memberid FROM ChatterConversationMember where Memberid=:recipientID];
         if(recieverID!=null && recieverID.size()>0){
-            
-            /**** Type is send starts ****/
-            if(type=='send'){
-                ConnectApi.ChatterMessages.sendMessage(messageText, recipientID);
-            }
-            /**** Type is send ends ****/
             chatterMessageThread = [SELECT Body, ConversationId, Id, SenderId, SentDate FROM ChatterMessage where ConversationId=:recieverID[0].ConversationId ORDER BY SentDate];
             if(chatterMessageThread!=null && chatterMessageThread.size()>0){
                 for(ChatterMessage cm : chatterMessageThread){
@@ -79,6 +78,9 @@ public with sharing class ChatterBoxController{
         
         @AuraEnabled
         public String isActive{get;set;}
+
+        @AuraEnabled
+        public String varinat{get;set;}
         
         public Wrapper(User usr, Boolean isAct){
             this.usr = usr;
@@ -87,10 +89,14 @@ public with sharing class ChatterBoxController{
             	this.initials = usr.FirstName.substring(0,1)+usr.LastName.substring(0,1);
             else
                 this.initials = 'PR';
-            if(isAct)
-                this.isActive = 'online';
-            else
-                this.isActive = 'offline';
+            if(isAct){
+                this.isActive = 'position: absolute; margin: -12px 0px 0px 23px;';
+                this.varinat = 'success';
+            }
+            else{
+                this.isActive = 'display : none;';
+                this.varinat = '';
+            }
         }
         
         public Integer compareTo(Object ObjToCompare) {
@@ -122,10 +128,10 @@ public with sharing class ChatterBoxController{
             this.chatID = chatID;
             this.sentDate = dt;
             if(isSenderMe){
-                this.chatStyle = 'border: none; background: rgb(175, 175, 175); margin: 5px; color: black !important; border-radius: 10px; width: 70%; float: right;';
+                this.chatStyle = 'border: none; background: rgb(154, 234, 157); margin: 5px; color: black !important; border-radius: 10px; width: 70%; float: right;';
             }
             else {
-                this.chatStyle = 'border: none; background: rgb(226, 226, 226); margin: 5px; color: black; border-radius: 10px; width: 70%; float: left;';
+                this.chatStyle = 'border: none; background: rgb(255, 255, 255); margin: 5px; color: black; border-radius: 10px; width: 70%; float: left;';
             }
         }
     }

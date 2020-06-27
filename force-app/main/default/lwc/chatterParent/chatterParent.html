@@ -1,78 +1,198 @@
 <template>
     <lightning-card>
-        <lightning-layout style="height:50px; border:1px solid rgb(200, 200, 200);background: rgb(135, 141, 175);;border-radius: 10px 10px 0px 0px; color:rgb(45, 45, 45);">
-            <lightning-layout-item style="height: 100%;" size="1" padding="around-medium">
-                <!--<lightning-icon icon-name="action:close" class="resizeclose" size="xx-small"></lightning-icon>-->
-            </lightning-layout-item>
-            <lightning-layout-item class="slds-align_absolute-center" style="height: 100%;" size="11" padding="around-medium">
-                <p style="font-family: serif;" class="slds-text-heading_large"><b>CHATTER</b></p>
-            </lightning-layout-item>
-        </lightning-layout>
-        <lightning-layout>
-            <lightning-layout-item style="height: 450px; border:1px solid rgb(200, 200, 200);margin: 0px auto;" size="12">
+        <lightning-layout multiple-rows="true" pull-to-boundary="small" class="Outer_Layout">
+            <lightning-layout-item style="height: 610px; border:1px solid rgb(200, 200, 200);margin: 0px auto;" size="12">
                     <lightning-layout>
-                        <lightning-layout-item class="chatboxStyle" flexibility="auto,shrink" style="background: rgb(255,255,255);" size="4" padding="around-small">
-                            <lightning-layout multiple-rows="true">
+                        <lightning-layout-item class="chatboxStyle" flexibility="auto,shrink" style="background: rgb(255,255,255);padding-top:0px;" size="2" padding="around-small">
+                            <lightning-layout pull-to-boundary="small" vertical-align="center" style="background: rgb(230,230,230);">
+                                <lightning-layout-item size="2" style="padding-left: 3%;">
+                                    <lightning-avatar variant="circle" src={currentUserPhoto} fallback-icon-name="standard:person_account" alternative-text={currentUserName}></lightning-avatar>
+                                    <div>
+                                        <lightning-icon slot="media" style="position: absolute; margin: 0px 0px 0px 25px; top: 15px;" variant="success" icon-name="utility:record" size="xx-small" alternative-text="online" title="online" ></lightning-icon>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="8" style="float:left" padding="around-small">
+                                    <div class="slds-text-body_regular">{currentUserName}</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="2" style="float:left" padding="around-small">
+                                    <lightning-button-menu variant="bare" alternative-text="Create" menu-alignment="right">
+                                        <lightning-menu-item value="Room" label="Create Room" onclick={handleCreateRoom}></lightning-menu-item>
+                                        <lightning-menu-item value="Group" label="Create Group" onclick={handleCreateGroup}></lightning-menu-item>
+                                    </lightning-button-menu>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows="true" style="height: 150px;">
                                 <lightning-layout-item size="12" style="padding: 0.45rem;">
-                                    <div class="slds-scrollable" style="height: 430px;">
-                                        <lightning-accordion class="main-menu" onsectiontoggle={handleToggleSection} active-section-name={activeSections}>
-                                            <lightning-accordion-section name="Room" label={roomLabel}>
-                                                <lightning-icon slot="actions" size="xx-small" icon-name="utility:add" alternative-text="Create Room" onclick={handleCreateRoom} icon-position="right"></lightning-icon>
-                                                <template for:each={allRoomsWrapper.data} for:item="roomWrap">
-                                                    <div key={roomWrap.gr.id}>
-                                                        <div style="margin-left: 15%;" class="slds-text-body_medium">{roomWrap.gr.name}</div>
-                                                    </div>
-                                                </template>
-                                            </lightning-accordion-section>
-                                    
-                                            <lightning-accordion-section name="Group" label={groupLabel}>
-                                                <lightning-icon slot="actions" size="xx-small" icon-name="utility:add" alternative-text="Create Group" onclick={handleCreateGroup} icon-position="right"></lightning-icon>
-                                                <template for:each={allGroupWrapper.data} for:item="groupWrap">
-                                                    <div key={groupWrap.cg.Id}>
-                                                        <div style="margin-left: 15%;" class="slds-text-body_medium">{groupWrap.cg.Name}</div>
-                                                    </div>
-                                                </template>
-                                            </lightning-accordion-section>
-        
-                                            <lightning-accordion-section name="Chat" label="Chat">
-                                                <div>
-                                                    <lightning-input onchange={searchUser} label="Search here" type="search"></lightning-input>
-                                                </div>
-                                                <div class="slds-scrollable" style="height: 250px;">
-                                                    <template if:true={getIfDataExists}>
-                                                        <template for:each={userWrapperList.data} for:item="wrap">
-                                                            <lightning-layout key={wrap.usr.Id} data-item={wrap.usr.Id} onclick={handleStartChat}>
-                                                                <lightning-layout-item size="2" padding="around-small">
-                                                                    <lightning-avatar variant="circle" src={wrap.usr.FullPhotoUrl} initials={wrap.initials} fallback-icon-name="standard:person_account" alternative-text={wrap.usr.name}></lightning-avatar>
-                                                                </lightning-layout-item>
-                                                                <lightning-layout-item size="10" padding="around-small">
-                                                                    <lightning-tile label={wrap.usr.Name}>
-                                                                        <!--<lightning-icon slot="media" class={getActiveClass} variant={getVariant} icon-name="utility:record" size="xx-small" alternative-text="online" title="online" ></lightning-icon>-->
-                                                                    </lightning-tile>
-                                                                </lightning-layout-item>
-                                                            </lightning-layout>
-                                                        </template>
+                                    <div class="slds-scrollable" style="height: 150px;">
+                                        <lightning-tree items={sidebarStructure} onselect={handleSidebar}></lightning-tree>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout pull-to-boundary="small" style="height: 400px;">
+                                <lightning-layout-item size="12" style="padding: 0.45rem;">
+                                    <div class="slds-scrollable" style="height: 490px;">
+                                        <div >
+                                            <p style="margin-top:5%;" class="slds-text-body_regular">Chat</p>
+                                            <lightning-layout vertical-align="center">
+                                                    <lightning-input variant="label-hidden" onchange={searchUser} label="Search here" type="search" style="width:100%;"></lightning-input>
+                                            </lightning-layout>
+                                            <div class="slds-scrollable" style="height: 330px;">
+                                                <template if:true={getIfDataExists}>
+                                                    <template for:each={userWrapperList.data} for:item="wrap">
+                                                        <lightning-layout vertical-align="center" key={wrap.usr.Id} data-item={wrap.usr.Id} data-name={wrap.usr.Name} data-photo={wrap.usr.FullPhotoUrl} data-isactive={wrap.isActive} data-variant={wrap.varinat} onclick={handleStartChat}>
+                                                            <lightning-layout-item size="2" padding="around-small">
+                                                                <lightning-avatar variant="circle" src={wrap.usr.FullPhotoUrl} initials={wrap.initials} fallback-icon-name="standard:person_account" alternative-text={wrap.usr.name}></lightning-avatar>
+                                                                <div>
+                                                                    <lightning-icon slot="media" style={wrap.isActive} variant={wrap.varinat} icon-name="utility:record" size="xx-small" ></lightning-icon>
+                                                                </div>
+                                                            </lightning-layout-item>
+                                                            <lightning-layout-item size="10" padding="around-small">
+                                                                <div class="slds-text-body_regular">{wrap.usr.Name}</div>
+                                                            </lightning-layout-item>
+                                                        </lightning-layout>
                                                     </template>
-                                                </div>
-                                            </lightning-accordion-section>
-                                        </lightning-accordion>
+                                                </template>
+                                            </div>
+                                        </div>
                                     </div>
                                 </lightning-layout-item>
                             </lightning-layout>
                         </lightning-layout-item>
-                        <lightning-layout-item class="chatboxStyle" style={bgImage} size="8" padding="around-small">
+                        <lightning-layout-item class="chatboxStyle" style={bgImage} size="10" padding="around-small">
+                            <template if:true={isInitial}>
+                                <lightning-layout horizontal-align="center" vertical-align="center" style="margin-top: 20%; border: 1px solid rgb(175, 175, 175); padding: 46px; font-weight: bolder; background: whitesmoke;">
+                                    <lightning-layout-item>
+                                        <div class="slds-text-body_regular" style="color:rgb(74,74,74)">Select any chatter group or chat user to start with.</div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
                             <template if:true={isChatStarted}>
-                                <c-chat-box chat-user-id={sendToID} ></c-chat-box>
+                                <c-chat-box if:true={isChatStarted} chat-user-info={chatUserInfo}></c-chat-box>
+                            </template>
+                            <template if:true={isGroupChatStarted}> 
+                                <lightning-layout pull-to-boundary="small" vertical-align="center" style={bannerOfSelectedGroup}>
+                                    <lightning-layout-item size="1" style="padding: 1%;">
+                                        <lightning-avatar size="large" variant="Square" src={selectedGroupInfo.Photo} fallback-icon-name="standard:person_account" alternative-text={selectedGroupInfo.Name}></lightning-avatar>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="7"  padding="around-small">
+                                        <lightning-tile style="background: rgba(230, 230, 230, 0.78); padding: 5px;" label={selectedGroupInfo.Name}>
+                                            <p class="slds-truncate" title={selectedGroupInfo.Members}>{selectedGroupInfo.Members} Members - {selectedGroupInfo.Type}</p>
+                                        </lightning-tile>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="1"  padding="around-small">
+                                        <lightning-button-menu
+                                                icon-name="utility:settings"
+                                                icon-size="small"
+                                                alternative-text="Settings"
+                                                variant="border-filled">
+                                            <lightning-menu-item label="Edit Group" value="Edit Group" onclick={handleGroupEdit}></lightning-menu-item>
+                                            <lightning-menu-item label="Delete Group" value="Delete Group" onclick={handleGroupDelete}></lightning-menu-item>
+                                            <lightning-menu-item label="Manage Members" value="Manage Members" onclick={handleGroupMembers}></lightning-menu-item>
+                                        </lightning-button-menu>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3"  padding="around-small">
+                                        <lightning-button style="float: right;" label="New Feed" onclick={handleCreateFeed}></lightning-button>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-layout >
+                                    <lightning-layout-item style="height: 545px;" size="9">
+                                        <div class="slds-scrollable" style="height: 530px;padding-top:0.75rem;">
+                                            <template for:each={feeds} for:item="feed">
+                                                <lightning-card key={feed}>
+                                                    <c-feed mapping-key={selectedGroupKey} feed-info={feed} onedit={handleFeedEdit} ondelete={handleFeedDelete}></c-feed>
+                                                </lightning-card>
+                                           </template>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item style="height: 500px;padding: 0.75rem 0 0.75rem 0.75rem;" size="3">
+                                        <lightning-card>
+                                            <lightning-layout multiple-rows="true" style="height: 250px;">
+                                                <lightning-layout-item size="12" padding="around-small">
+                                                    <div class="slds-text-title" style="font-weight: bolder; margin-bottom: 10px;">Description</div>
+                                                    <div class="slds-text-body_small">{selectedGroupInfo.Description}</div>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="12" padding="around-small">
+                                                    <div class="slds-text-title" style="font-weight: bolder; margin-bottom: 10px;">Information</div>
+                                                    <lightning-formatted-rich-text  value={selectedGroupInfo.Body}></lightning-formatted-rich-text>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="12" padding="around-small">
+                                                    <div class="slds-text-title" style="font-weight: bolder; margin-bottom: 10px;">Group Email</div>
+                                                    <lightning-formatted-email  value={selectedGroupInfo.Email} ></lightning-formatted-email>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </lightning-card>
+                                    </lightning-layout-item>
+                                </lightning-layout>
                             </template>
                         </lightning-layout-item>
                     </lightning-layout>
             </lightning-layout-item>
         </lightning-layout>
     </lightning-card>
+    <lightning-card if:true={manageMember}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+              <header class="slds-modal__header">
+                <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Manage Members</h2>
+              </header>
+              <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                <lightning-tabset variant="scoped">
+                    <lightning-tab label="Existing Members" onactive={handleManageMemberExistingTab}>
+                        <table>
+                            <tbody>
+                                <template for:each={existingMembers} for:item="item">
+                                    <tr key={item}>
+                                        <td><lightning-input type="checkbox" label="Abandon" variant="label-hidden" value={item.abandon} title="Choose to delete" data-memberid={item.memberId} onchange={handleExistingMemberSelection}></lightning-input></td>
+                                        <td class="slds-text-body_regular">{item.userName}</td>
+                                        <td class="slds-text-body_regular">{item.role}</td>
+                                    </tr>                                    
+                                </template>
+                            </tbody>
+                        </table>
+                        <footer class="slds-modal_footer">
+                            
+                        </footer>
+                    </lightning-tab>
+                    <lightning-tab label="Add Members" onactive={handleManageMemberAddTab}>
+                        <lightning-dual-listbox name="Users"
+                            label="Select Member"
+                            source-label="Available"
+                            selected-label="Selected"
+                            field-level-help="Select member for the group"
+                            value={addedMemberIds}
+                            options={manageMemberAddTabInfo}
+                            onchange={handleOnAddMember}>
+                        </lightning-dual-listbox>
+                        <lightning-combobox
+                            name="Role"
+                            label="Role"
+                            value={roleValue}
+                            placeholder="Select Progress"
+                            options={roleOptions}
+                            onchange={handleRoleChange} >
+                        </lightning-combobox>
+                        <footer class="slds-modal_footer">
+                            
+                        </footer>
+                    </lightning-tab>
+                </lightning-tabset>
+              </div>
+              <footer class="slds-modal__footer">
+                <lightning-button label="Cancel"  variant="neutral" onclick={closeModal} style="margin-right: 10px;"></lightning-button>
+                <lightning-button label="Delete" variant="brand" onclick={handleDeleteMembers} if:true={toggleManageMembertabs}></lightning-button>
+                <lightning-button label="Add" variant="brand" onclick={handleSaveMembers} if:false={toggleManageMembertabs}></lightning-button>
+              </footer>
+            </div>
+          </section>
+          <div class="slds-backdrop slds-backdrop_open"></div>
+    </lightning-card>
     <lightning-card if:true={createRoom}>
-        <c-create-room onclose={closeModal}></c-create-room>
+        <c-create-room onsave={refreshRoomWire} onclose={closeModal}></c-create-room>
     </lightning-card>
     <lightning-card if:true={createGroup}>
-        <c-create-group onclose={closeModal}></c-create-group>
+        <c-create-group onedit={handleCurrentGroupEdit} onsave={refreshGroupWire} group-info={selectedGroupInfo} mode={groupMode} onclose={closeModal}></c-create-group>
+    </lightning-card>
+    <lightning-card if:true={createFeed}>
+        <c-create-Feed mapping-key={selectedGroupKey} group-id={currentGroupId} mode={feedMode} feed-id={feedIdToEdit} onsave={handleSidebar} onclose={closeModal}></c-create-Feed>
     </lightning-card>
 </template>

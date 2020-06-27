@@ -7,8 +7,12 @@
     margin: 0px 0px 0px 0px !important;
 }
 .chatboxStyle{
-    height: 450px; 
+    height: 610px; 
     border:1px solid rgb(200,200,200);
+}
+.Outer_Layout{
+    margin-top: calc(-3 * var(--lwc-spacingSmall,0.75rem));
+    margin-bottom: calc(-1 * var(--lwc-spacingSmall,0.75rem));
 }
 .slds-docked-composer{
     width:50% !important;

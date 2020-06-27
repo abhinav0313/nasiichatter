@@ -32,23 +32,24 @@ export default class CreateRoom extends LightningElement {
         console.log('****FINAL STRING::',groupIDString);
         saveTheRoom({name: this.roomName, groupIds: groupIDString}).then(result => {
             console.log(result);
-            closeModal();
+            this.closeModal();
+            this.dispatchEvent(new CustomEvent('save'));
         }).catch(error => {
             console.log('error::',error);
         });
     }
 
     handleCreateGroup(){
-        
+
     }
     get groupForRoom(){
         var valueList = [];
         if(this.availabeleGroupsForRoom!=null){
-            console.log('*****Available groups::',this.availabeleGroupsForRoom);
+            console.log('*****Available groups::',this.availabeleGroupsForRoom.data);
             console.log('inside data********',this.availabeleGroupsForRoom.data);
             this.availabeleGroupsForRoom.data.forEach(result => {
                 console.log('inside iteration********',result);
-                valueList.push({label: result.groupName, value: result.groupID});
+                valueList.push({label: result.Name, value: result.Id});
                 console.log('inside iteration********');
             });
             console.log('*****Group FOR ROOM::',valueList);
